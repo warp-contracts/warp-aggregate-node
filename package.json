@@ -1,0 +1,30 @@
+{
+  "name": "warp-aggregate-node",
+  "version": "1.0.0",
+  "description": "An aggregate node for Warp Contracts",
+  "author": "just_ppe",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "start:prod": "docker-compose up -d && node src/listener.js",
+    "start:prod:unsafe": "docker-compose up -d && node src/listener.js allowUnsafe",
+    "start:test": "docker-compose up -d && node src/listener.js test",
+    "start:test:unsafe": "docker-compose up -d && node src/listener.js test allowUnsafe"
+  },
+  "engines": {
+    "node": ">=16.5"
+  },
+  "dependencies": {
+    "@koa/cors": "4.0.0",
+    "@koa/router": "12.0.0",
+    "arweave": "1.11.6",
+    "better-sqlite3": "7.6.2",
+    "knex": "^2.2.0",
+    "bullmq": "^3.2.0",
+    "ioredis": "^5.2.4",
+    "koa": "^2.13.4",
+    "koa-bodyparser": "4.3.0",
+    "koa-compress": "^5.1.0",
+    "warp-contracts": "^1.2.17"
+  }
+}
