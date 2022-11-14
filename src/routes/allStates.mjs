@@ -41,14 +41,19 @@ export const allStates = async (ctx) => {
     const result = await nodeDb.raw(`
         SELECT contract_tx_id,
                sort_key,
-               state
+               state,
+                count(*) OVER () AS total
         FROM states
         ORDER BY ${parsedOrderBy}
         LIMIT ? OFFSET ?
     `, bindings)
 
+    const resultTotal = await nodeDb.raw(
+      `select count(*) as total from states`);
+
     ctx.body = {
       paging: {
+        total: resultTotal[0].total,
         limit: parsedLimit,
         items: result?.length,
         page: parsedPage

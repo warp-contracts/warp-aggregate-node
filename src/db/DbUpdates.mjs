@@ -51,7 +51,7 @@ export class DbUpdates {
         'contract_tx_id': contractTxId.trim(),
         'token_ticker': ticker ? ticker.trim() : symbol.trim(),
         'token_name': name?.trim(),
-        'balance': balances[walletAddress].toString(),
+        'balance': balances[walletAddress] ? balances[walletAddress].toString() : null,
         'sort_key': sortKey
       });
       // sqlite explodes when trying to put too big batch insert
