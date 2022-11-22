@@ -42,7 +42,10 @@ export const allStates = async (ctx) => {
         SELECT contract_tx_id,
                sort_key,
                state,
-                count(*) OVER () AS total
+               state_hash,
+               node,
+               signature,
+               manifest
         FROM states
         ORDER BY ${parsedOrderBy}
         LIMIT ? OFFSET ?
