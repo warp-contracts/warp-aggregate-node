@@ -5,7 +5,7 @@ const allowedOrders = ['asc', 'desc'];
 
 export const allStates = async (ctx) => {
 
-  const {page, limit, orderBy, order} = ctx.query;
+  const {page, limit, orderBy, order, id} = ctx.query;
 
   const nodeDb = ctx.nodeDb;
 
@@ -27,6 +27,9 @@ export const allStates = async (ctx) => {
   const offset = parsedPage ? (parsedPage - 1) * parsedLimit : 0;
 
   const bindings = [];
+  if (id) {
+    bindings.push(id);
+  }
   bindings.push(parsedLimit);
   bindings.push(offset);
 
@@ -47,6 +50,7 @@ export const allStates = async (ctx) => {
                signature,
                manifest
         FROM states
+        ${id ? ' WHERE contract_tx_id = ? ' : ''}
         ORDER BY ${parsedOrderBy}
         LIMIT ? OFFSET ?
     `, bindings)
