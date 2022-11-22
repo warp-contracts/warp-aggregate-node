@@ -8,7 +8,7 @@ export class DbUpdates {
     this.#nodeDb = db;
   }
 
-  async upsertState(contractTxId, sortKey, state, signature, manifest, stateHash) {
+  async upsertState(contractTxId, sortKey, state, node, signature, manifest, stateHash) {
     this.#logger.info('Upserting state', contractTxId);
 
     await this.#nodeDb('states')
@@ -16,6 +16,7 @@ export class DbUpdates {
         'contract_tx_id': contractTxId.trim(),
         'sort_key': sortKey,
         'state': state,
+        'node': node,
         'signature': signature,
         'manifest': manifest,
         'state_hash': stateHash

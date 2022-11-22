@@ -91,7 +91,7 @@ async function subscribeToGatewayNotifications(dbUpdates) {
     if (msgObj.sortKey.localeCompare(lastSortKey)) {
       await dbUpdates.upsertState(
         msgObj.contractTxId, msgObj.sortKey, msgObj.state,
-        msgObj.signature, msgObj.manifest, msgObj.stateHash);
+        msgObj.node, msgObj.signature, msgObj.manifest, msgObj.stateHash);
       await dbUpdates.upsertBalances(msgObj.contractTxId, msgObj.sortKey, msgObj.state);
     } else {
       logger.warn('Received state with older or equal sort key', {

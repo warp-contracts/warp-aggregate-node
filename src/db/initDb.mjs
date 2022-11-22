@@ -17,9 +17,10 @@ export async function createNodeDbTables(knex) {
     await knex.schema.createTable('states', function (t) {
       t.string('contract_tx_id').index().unique();
       t.string('sort_key').index();
-      t.string('signature');
+      t.string('node').index();
+      t.string('signature').index();
       t.jsonb('manifest');
-      t.string('state_hash');
+      t.string('state_hash').index();
       t.jsonb('state');
     });
   }
