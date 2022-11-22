@@ -6,10 +6,10 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "start:prod": "docker-compose up -d && node src/listener.js",
-    "start:prod:unsafe": "docker-compose up -d && node src/listener.js allowUnsafe",
-    "start:test": "docker-compose up -d && node src/listener.js test",
-    "start:test:unsafe": "docker-compose up -d && node src/listener.js test allowUnsafe"
+    "start:prod": "docker-compose up -d && node src/listener.mjs",
+    "start:prod:unsafe": "docker-compose up -d && node src/listener.mjs allowUnsafe",
+    "start:test": "docker-compose up -d && node src/listener.mjs test",
+    "start:test:unsafe": "docker-compose up -d && node src/listener.mjs test allowUnsafe"
   },
   "engines": {
     "node": ">=16.5"
