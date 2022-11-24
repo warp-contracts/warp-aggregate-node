@@ -44,7 +44,14 @@ async function runListener() {
     connection: {
       filename: `sqlite/node.sqlite`
     },
-    useNullAsDefault: true
+    useNullAsDefault: true,
+    pool: {
+      afterCreate: (conn, cb) => {
+        // https://github.com/knex/knex/issues/4971#issuecomment-1030701574
+        conn.pragma('journal_mode = WAL');
+        cb();
+      }
+    }
   });
   await createNodeDbTables(nodeDb);
   const dbUpdates = new DbUpdates(nodeDb);
