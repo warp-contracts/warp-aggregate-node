@@ -47,7 +47,7 @@ Description coming soon!
             "contract_tx_id": "ghCNSciu61vISHGV4XfgLoBkLfdm_qewKhVgAEg_pOs",
             "id": "XW5dWJ68ykzedQ-_komt3Pl5eQXWEQrgAyYVMcsGP7c",
             "owner_address": "0x64587b293e4811F4e2588A971D5dB2a11E6D2E4F",
-            "tag_index_0": "lens",
+            "tag_index_0": "project-a",
             "tag_index_1": "0x0120-0x04",
             "tag_index_2": null,
             "tag_index_3": null,

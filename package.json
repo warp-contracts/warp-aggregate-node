@@ -26,6 +26,7 @@
     "koa": "^2.13.4",
     "koa-bodyparser": "4.3.0",
     "koa-compress": "^5.1.0",
+    "supertest": "^6.3.3",
     "warp-contracts": "^1.2.17"
   },
   "devDependencies": {
