@@ -1,0 +1,11 @@
+We have to pub sub channels:
+
+* AppSync
+  * publish interactions `interactions/<<contractTxId>>`
+  * publisher: `gateway`
+
+* Redis pubsub
+  * publish states `states`
+    * publisher: `warp-dre-node`
+  * publish new contracts creations `contracts`
+    * publisher: `gateway`

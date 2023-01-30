@@ -1,16 +1,17 @@
-import {LoggerFactory} from 'warp-contracts';
+import { LoggerFactory } from 'warp-contracts';
 import bodyParser from 'koa-bodyparser';
 import cors from '@koa/cors';
 import compress from 'koa-compress';
 import zlib from 'zlib'
 import Koa from 'koa';
-import {createNodeDbTables} from "./db/initDb.mjs";
+import { createNodeDbTables } from "./db/initDb.mjs";
 import Redis from "ioredis";
 import * as fs from "fs";
 import * as path from "path";
-import {DbUpdates} from "./db/DbUpdates.mjs";
-import {router} from "./router.mjs";
+import { DbUpdates } from "./db/DbUpdates.mjs";
+import { router } from "./router.mjs";
 import knex from "knex";
+import { onNewInteraction } from './handlers/onInteraction.mjs';
 
 LoggerFactory.INST.logLevel('none');
 LoggerFactory.INST.logLevel('debug', 'listener');
@@ -68,6 +69,29 @@ async function runListener() {
   logger.info(`Listening on port ${port}`);
 }
 
+async function onNewState(message, dbUpdates) {
+  const msgObj = JSON.parse(message);
+  if (!isTxIdValid(msgObj.contractTxId)) {
+    logger.warn('Invalid contract txId');
+    return;
+  }
+
+  const lastSortKey = await dbUpdates.lastSortKey(msgObj.contractTxId);
+
+  if (msgObj.sortKey.localeCompare(lastSortKey)) {
+    await dbUpdates.upsertState(
+      msgObj.contractTxId, msgObj.sortKey, msgObj.state,
+      msgObj.node, msgObj.signature, msgObj.manifest, msgObj.stateHash);
+    await dbUpdates.upsertBalances(msgObj.contractTxId, msgObj.sortKey, msgObj.state);
+  } else {
+    logger.warn('Received state with older or equal sort key', {
+      contract: msgObj.contractTxId,
+      received: msgObj.sortKey,
+      latest: lastSortKey
+    });
+  }
+}
+
 
 async function subscribeToGatewayNotifications(dbUpdates) {
   const connectionOptions = readGwPubSubConfig();
@@ -80,32 +104,27 @@ async function subscribeToGatewayNotifications(dbUpdates) {
       logger.error("Failed to subscribe:", err.message);
     } else {
       logger.info(
-        `Subscribed successfully! This client is currently subscribed to ${count} channels.`
+        `Subscribed successfully! This client is currently subscribed to state channel.`
+      );
+    }
+  });
+
+  subscriber.subscribe("contracts", (err, count) => {
+    if (err) {
+      logger.error("Failed to subscribe:", err.message);
+    } else {
+      logger.info(
+        `Subscribed successfully! This client is currently subscribed to contracts channel.`
       );
     }
   });
 
   subscriber.on("message", async (channel, message) => {
-    const msgObj = JSON.parse(message);
-    logger.info(`Received message from channel ${channel} for ${msgObj.contractTxId}`);
-    if (!isTxIdValid(msgObj.contractTxId)) {
-      logger.warn('Invalid contract txId');
-      return;
-    }
-
-    const lastSortKey = await dbUpdates.lastSortKey(msgObj.contractTxId);
-
-    if (msgObj.sortKey.localeCompare(lastSortKey)) {
-      await dbUpdates.upsertState(
-        msgObj.contractTxId, msgObj.sortKey, msgObj.state,
-        msgObj.node, msgObj.signature, msgObj.manifest, msgObj.stateHash);
-      await dbUpdates.upsertBalances(msgObj.contractTxId, msgObj.sortKey, msgObj.state);
-    } else {
-      logger.warn('Received state with older or equal sort key', {
-        contract: msgObj.contractTxId,
-        received: msgObj.sortKey,
-        latest: lastSortKey
-      });
+    logger.info(`Received message from channel ${channel}`);
+    if (channel === "contracts") {
+      await onNewInteraction(message, dbUpdates);
+    } else if (channel === "states") {
+      await onNewState(message, dbUpdates)
     }
   });
 }
