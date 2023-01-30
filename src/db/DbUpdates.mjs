@@ -1,4 +1,6 @@
-import {LoggerFactory} from "warp-contracts";
+import { LoggerFactory } from "warp-contracts";
+
+const TAGS_LIMIT = 5;
 
 export class DbUpdates {
   #logger = LoggerFactory.INST.create('DbUpdates');
@@ -35,6 +37,26 @@ export class DbUpdates {
     }
 
     return result[0].maxSortKey;
+  }
+
+  async upsertInteraction(contractTxId, id, ownerAddress, blockHeight, indexes) {
+    this.#logger.info('Upserting interactions', contractTxId);
+
+    const effectiveIndexesCount = Math.min(TAGS_LIMIT, indexes.length);
+    const indexesInsert = {};
+
+    for (let i = 0; i < effectiveIndexesCount; i++) {
+      indexesInsert[`tag_index_${i}`] = indexes[i];
+    }
+
+    await this.#nodeDb('interactions')
+      .insert({
+        'contract_tx_id': contractTxId.trim(),
+        'id': id,
+        'owner_address': ownerAddress,
+        'block_height': blockHeight,
+        ...indexesInsert
+      });
   }
 
   async upsertBalances(contractTxId, sortKey, state) {

@@ -1,0 +1,75 @@
+{
+    "contractTxId": "VFr3Bk-uM-motpNNkkFg4lNW1BMmSfzqsVO551Ho4hA",
+    "test": false,
+    "source": "warp-gw",
+    "interaction": {
+        "id": "Q5JZKsQsW-YfD_cro-LkLPMm29_UX-RC2cPKNV7HtfQ",
+        "owner": {
+            "address": "96nQROiF0ahfpMzTtyfpRNa_gu7s7OUWPUhsHSsz5aI"
+        },
+        "recipient": "",
+        "tags": [
+            {
+                "name": "Bundle-Format",
+                "value": "binary"
+            },
+            {
+                "name": "Bundle-Version",
+                "value": "2.0.0"
+            },
+            {
+                "name": "Application",
+                "value": "4EVERLAND"
+            },
+            {
+                "name": "App-Name",
+                "value": "arseeding"
+            },
+            {
+                "name": "App-Version",
+                "value": "1.0.0"
+            },
+            {
+                "name": "Action",
+                "value": "Bundle"
+            },
+            {
+                "name": "Protocol-Name",
+                "value": "BAR"
+            },
+            {
+                "name": "Action",
+                "value": "Burn"
+            },
+            {
+                "name": "App-Name",
+                "value": "SmartWeaveAction"
+            },
+            {
+                "name": "App-Version",
+                "value": "0.3.0"
+            },
+            {
+                "name": "Input",
+                "value": "{\"function\":\"mint\"}"
+            },
+            {
+                "name": "Contract",
+                "value": "VFr3Bk-uM-motpNNkkFg4lNW1BMmSfzqsVO551Ho4hA"
+            }
+        ],
+        "block": {
+            "height": 1108344,
+            "id": "w-pu5rz9--Jh9SwWeZZgLcaNGC6MkRDXZJZ4Ge_nmvAhFfLwjijDmfAHh00iYOOl",
+            "timestamp": 1675021400
+        },
+        "fee": {
+            "winston": "50311118"
+        },
+        "quantity": {
+            "winston": "0"
+        },
+        "parent": null,
+        "bundledIn": null
+    }
+}

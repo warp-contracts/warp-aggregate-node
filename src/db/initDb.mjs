@@ -24,4 +24,19 @@ export async function createNodeDbTables(knex) {
       t.jsonb('state');
     });
   }
+
+  const hasInteractionTable = await knex.schema.hasTable('interactions');
+  if (!hasInteractionTable) {
+    await knex.schema.createTable('interactions', function (t) {
+      t.string('id').index().unique();
+      t.string('contract_tx_id').index();
+      t.string('owner_address').index();
+      t.integer('block_height');
+      t.string('tag_index_0').index();
+      t.string('tag_index_1').index();
+      t.string('tag_index_2').index();
+      t.string('tag_index_3').index();
+      t.string('tag_index_4').index();
+    });
+  }
 }
