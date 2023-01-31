@@ -10,7 +10,10 @@
     "start:prod:unsafe": "docker-compose up -d && node src/listener.mjs allowUnsafe",
     "start:test": "docker-compose up -d && node src/listener.mjs test",
     "start:test:unsafe": "docker-compose up -d && node src/listener.mjs test allowUnsafe",
-    "test": "yarn node --experimental-vm-modules $(yarn bin jest)"
+    "test": "yarn node --experimental-vm-modules $(yarn bin jest)",
+    "lint": "eslint . --ext .js,.mjs",
+    "lint:fix": "eslint . --ext .js,.mjs --fix",
+    "prettier:format": "prettier --config .prettierrc 'src/**/*.ts' --write"
   },
   "engines": {
     "node": ">=16.5"
@@ -18,9 +21,11 @@
   "dependencies": {
     "@koa/cors": "4.0.0",
     "@koa/router": "12.0.0",
+    "@types/jest": "^29.4.0",
     "arweave": "1.11.6",
     "better-sqlite3": "7.6.2",
     "bullmq": "^3.2.0",
+    "eslint-plugin-jest": "^27.2.1",
     "ioredis": "^5.2.4",
     "knex": "^2.2.0",
     "koa": "^2.13.4",
@@ -30,8 +35,11 @@
     "warp-contracts": "^1.2.17"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.20.2",
-    "babel-jest": "^29.4.1",
+    "@typescript-eslint/eslint-plugin": "^5.30.7",
+    "@typescript-eslint/parser": "^5.30.7",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.1",
     "jest": "^29.4.1"
   }
 }
