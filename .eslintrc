@@ -1,0 +1,24 @@
+{
+    "root": true,
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+        "prettier",
+        "jest"
+    ],
+    "extends": [
+        "eslint:recommended",
+        "prettier"
+    ],
+    "rules": {
+        "no-console": 1, // warning
+        "multiline-ternary": "off",
+        "no-nested-ternary": "error",
+        "no-multiple-empty-lines": "off",
+        "prettier/prettier": 2, // error
+        "@typescript-eslint/no-this-alias": 0
+    },
+    "env": {
+        "jest/globals": true,
+        "node": true
+    }
+}

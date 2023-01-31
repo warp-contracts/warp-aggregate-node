@@ -1,11 +1,10 @@
 const MAX_STATES_PER_PAGE = 1000;
 
-const allowedOrderingColumns = ['contract_tx_id', 'sort_key'];
-const allowedOrders = ['asc', 'desc'];
+const allowedOrderingColumns = ["contract_tx_id", "sort_key"];
+const allowedOrders = ["asc", "desc"];
 
 export const allStates = async (ctx) => {
-
-  const {page, limit, orderBy, order, id} = ctx.query;
+  const { page, limit, orderBy, order, id } = ctx.query;
 
   const nodeDb = ctx.nodeDb;
 
@@ -34,14 +33,15 @@ export const allStates = async (ctx) => {
   bindings.push(offset);
 
   let parsedOrderBy = null;
-  if (orderBy == 'contract_tx_id') {
+  if (orderBy == "contract_tx_id") {
     parsedOrderBy = `contract_tx_id ${order}`;
-  } else if (orderBy == 'sort_key') {
+  } else if (orderBy == "sort_key") {
     parsedOrderBy = `sort_key ${order}, contract_tx_id ${order}`;
   }
 
   try {
-    const result = await nodeDb.raw(`
+    const result = await nodeDb.raw(
+      `
         SELECT contract_tx_id,
                sort_key,
                state,
@@ -50,20 +50,23 @@ export const allStates = async (ctx) => {
                signature,
                manifest
         FROM states
-        ${id ? ' WHERE contract_tx_id = ? ' : ''}
+        ${id ? " WHERE contract_tx_id = ? " : ""}
         ORDER BY ${parsedOrderBy}
         LIMIT ? OFFSET ?
-    `, bindings)
+    `,
+      bindings
+    );
 
     const resultTotal = await nodeDb.raw(
-      `select count(*) as total from states`);
+      `select count(*) as total from states`
+    );
 
     ctx.body = {
       paging: {
         total: resultTotal[0].total,
         limit: parsedLimit,
         items: result?.length,
-        page: parsedPage
+        page: parsedPage,
       },
       states: result,
     };
@@ -72,5 +75,4 @@ export const allStates = async (ctx) => {
     ctx.body = e.message;
     ctx.status = 500;
   }
-
 };
