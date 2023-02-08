@@ -86,9 +86,8 @@ async function subscribeToGatewayNotifications(dbUpdates) {
       } else {
         logger.error(
           `Unknown type of message from channel ${channel} => ${message}`
-        )
+        );
       }
-
     } else if (channel === "states") {
       await onNewState(message, dbUpdates);
     }
