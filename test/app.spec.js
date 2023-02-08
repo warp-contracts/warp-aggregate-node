@@ -5,28 +5,110 @@ import request from "supertest";
 import { DbUpdates } from "../src/db/DbUpdates.mjs";
 
 describe("routes tests", () => {
+
+  let nodeDb;
+  let app;
+
+  beforeAll(async () => {
+    nodeDb = knex({
+      client: "better-sqlite3",
+      connection: ":memory:",
+      useNullAsDefault: true,
+    });
+    app = createApp(nodeDb);
+    await createNodeDbTables(nodeDb);
+  });
+
+  afterAll(async () => {
+    await nodeDb.destroy();
+  });
+
+  afterEach(async () => {
+    await nodeDb("interactions").del();
+    await nodeDb("deployments").del();
+    await nodeDb("states").del();
+  });
+
+  describe("/nft-by-owner", () => {
+
+    it("should fetch empty list ", async () => {
+      const response = await request(app.callback()).get(
+        "/nft-by-owner?ownerAddress=a"
+      );
+      expect(response.status).toBe(200);
+      expect(response.body.contracts.length).toBe(0);
+    });
+
+    it("should fail if ownerAddress not passed", async () => {
+      const response = await request(app.callback()).get(
+        "/nft-by-owner"
+      );
+      expect(response.status).toBe(500);
+    });
+
+    it("should return contracts 'Indexed-By' 'atomic-asset' on given owner", async () => {
+      const dbUpdates = new DbUpdates(nodeDb);
+
+      await dbUpdates.upsertDeployment("1", ["atomic-asset"]);
+      await dbUpdates.upsertState("1", "2", {
+        owner: "ALICE"
+      }, "node1", "sig_by_node_1", '{}', "hash")
+
+      const response = await request(app.callback()).get(
+        "/nft-by-owner?ownerAddress=ALICE"
+      );
+      expect(response.status).toBe(200);
+      expect(response.body.contracts.length).toBe(1);
+    });
+
+    it("should return contracts 'Indexed-By' 'atomic-asset' on given owner, when many indexes", async () => {
+      const dbUpdates = new DbUpdates(nodeDb);
+
+      await dbUpdates.upsertDeployment("1", ["atomic-asset", "b", "c"]);
+      await dbUpdates.upsertState("1", "2", {
+        owner: "ALICE"
+      }, "node1", "sig_by_node_1", '{}', "hash")
+
+      const response = await request(app.callback()).get(
+        "/nft-by-owner?ownerAddress=ALICE"
+      );
+      expect(response.status).toBe(200);
+      expect(response.body.contracts.length).toBe(1);
+    });
+
+    it("should return many contracts 'Indexed-By' 'atomic-asset' on given owner, when many indexes", async () => {
+      const dbUpdates = new DbUpdates(nodeDb);
+
+      await dbUpdates.upsertDeployment("1", ["atomic-asset", "b", "c"]);
+      await dbUpdates.upsertState("1", "2", {
+        owner: "ALICE"
+      }, "node1", "sig_by_node_1", '{}', "hash")
+
+      await dbUpdates.upsertDeployment("2", ["atomic-asset", "b", "c"]);
+      await dbUpdates.upsertState("2", "2", {
+        owner: "ALICE"
+      }, "node1", "sig_by_node_1", '{}', "hash")
+
+      await dbUpdates.upsertDeployment("3", ["3", "b", "c"]);
+      await dbUpdates.upsertState("2", "2", {
+        owner: "ALICE"
+      }, "node1", "sig_by_node_1", '{}', "hash")
+
+      await dbUpdates.upsertDeployment("4", ["atomic-asset", "b", "c"]);
+      await dbUpdates.upsertState("4", "2", {
+        owner: "BOB"
+      }, "node1", "sig_by_node_1", '{}', "hash")
+
+      const response = await request(app.callback()).get(
+        "/nft-by-owner?ownerAddress=ALICE"
+      );
+      expect(response.status).toBe(200);
+      expect(response.body.contracts.length).toBe(2);
+    });
+
+  });
+
   describe("/interactions-by-indexes", () => {
-    let nodeDb;
-    let app;
-
-    beforeAll(async () => {
-      nodeDb = knex({
-        client: "better-sqlite3",
-        connection: ":memory:",
-        useNullAsDefault: true,
-      });
-      app = createApp(nodeDb);
-      await createNodeDbTables(nodeDb);
-    });
-
-    afterAll(async () => {
-      await nodeDb.destroy();
-    });
-
-    afterEach(async () => {
-      await nodeDb("interactions").del();
-    });
-
     it("should fetch empty list of interactions", async () => {
       const response = await request(app.callback()).get(
         "/interactions-by-indexes?indexes=1;2"

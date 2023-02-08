@@ -35,7 +35,7 @@ export const interactions = async (ctx) => {
         ${ownerAddress ? "WHERE owner_address = ?" : ""}
         ${contractTxId ? "WHERE contract_tx_id = ?" : ""}
         ${indexQuery}
-        ORDER BY block_height desc
+        ORDER BY block_height DESC
         LIMIT ? OFFSET ?
     `,
       [...bindings, parsedLimit, offset]

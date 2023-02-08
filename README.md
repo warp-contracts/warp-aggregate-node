@@ -14,10 +14,10 @@ Description coming soon!
 2. `/balances` - returns a list of all balances held by a given `walletAddress`
    Example:
    https://contracts.warp.cc/balances?walletAddress=C6nBlkd7pKRxPiUk1AaGeCrup7XiVQow40NO6c9RDGg
-3. `/interactions-by-indexes` - returns a list off interactions associated with
+3. `/interactions-by-indexes` - returns a list of interactions associated with
    given indexes.
 
-   To associate interaction with indexes you have to provide tag with name
+   To associate interaction with indexes you have to provide a tag with the name
    `Indexed-By`, where values are indexes (up to 5 possible). Example with
    warp-sdk:
    ```javascript
@@ -29,10 +29,10 @@ Description coming soon!
 
    Params:
    - `indexes` - list of indexes that interaction is associated with. Indexes
-     are divided by `;`. If you pass more then one index, interactions has to
+     are divided by `;`. If you pass more than one index, interactions have to
      have ALL passed indexes (AND).
    - `contractTxId`
-   - `ownerAddress` - owner of interaction
+   - `ownerAddress` - the owner of the interaction
 
    Example request:
 
