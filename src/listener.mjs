@@ -8,6 +8,7 @@ import knex from "knex";
 import { onNewInteraction } from "./handlers/onInteraction.mjs";
 import { createApp } from "./app.mjs";
 import { onNewState } from "./handlers/onState.mjs";
+import { onContractDeployment } from "./handlers/onContractDeployment.mjs";
 
 LoggerFactory.INST.logLevel("none");
 LoggerFactory.INST.logLevel("debug", "listener");
@@ -72,8 +73,22 @@ async function subscribeToGatewayNotifications(dbUpdates) {
 
   subscriber.on("message", async (channel, message) => {
     logger.info(`Received message from channel ${channel}`);
+
     if (channel === "contracts") {
-      await onNewInteraction(message, dbUpdates);
+      const msgObj = JSON.parse(message);
+
+      if (msgObj.initialState) {
+        // contract deployment
+        await onContractDeployment(msgObj, dbUpdates);
+      } else if (msgObj.interaction) {
+        // new interaction with existing contract
+        await onNewInteraction(msgObj, dbUpdates);
+      } else {
+        logger.error(
+          `Unknown type of message from channel ${channel} => ${message}`
+        )
+      }
+
     } else if (channel === "states") {
       await onNewState(message, dbUpdates);
     }

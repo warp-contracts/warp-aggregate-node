@@ -39,4 +39,17 @@ export async function createNodeDbTables(knex) {
       t.string("tag_index_4").index();
     });
   }
+
+  const hasDeploymentTable = await knex.schema.hasTable("deployments");
+  if (!hasDeploymentTable) {
+    await knex.schema.createTable("deployments", function (t) {
+      t.increments("id");
+      t.string("contract_tx_id").index().unique();
+      t.string("tag_index_0").index();
+      t.string("tag_index_1").index();
+      t.string("tag_index_2").index();
+      t.string("tag_index_3").index();
+      t.string("tag_index_4").index();
+    });
+  }
 }

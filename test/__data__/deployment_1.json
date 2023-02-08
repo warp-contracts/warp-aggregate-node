@@ -1,0 +1,103 @@
+{
+    "contractTxId": "Iq_GUA6jmyQaB9jeKIR52Sf1p03ihjTTG4DsyzEM0SU",
+    "test": false,
+    "source": "warp-gw",
+    "initialState": {
+        "ticker": "ATOMIC-ASSET-1623251892682752000",
+        "balances": {
+            "4VKvvMcRuMYnQtiGMNbiokRd6Graw-WmBN_1gNd3QCw": 1
+        },
+        "transferable": false,
+        "canEvolve": true,
+        "description": "caption this. . . . #dark #emo #emopop #darkpop #electro #electropop #electroindustrial #alien #chill #chillhop #lofi #hiphop #rap #darkrap #trance #spacey #cosmic #dragons #doof #Aliens  #electronicmusic #electronic #CaptionThis #photography #hot #DUO https://t.co/Rs5lTe6GEO",
+        "lastTransferTimestamp": null,
+        "lockTime": 0,
+        "maxSupply": 1,
+        "title": "Alex Artifact - Username: CTRL ZEN, Tweet: caption this. . . . #dark #emo ...",
+        "name": "Artifact - Username: CTRL ZEN, Tweet: caption this. . . . #dark #emo ...",
+        "dateCreated": "1675848392165",
+        "owner": "4VKvvMcRuMYnQtiGMNbiokRd6Graw-WmBN_1gNd3QCw"
+    },
+    "tags": [
+        {
+            "name": "App-Name",
+            "value": "SmartWeaveContract"
+        },
+        {
+            "name": "App-Version",
+            "value": "0.3.0"
+        },
+        {
+            "name": "Content-Type",
+            "value": "application/json"
+        },
+        {
+            "name": "Contract-Src",
+            "value": "6hZ5JgmJkdNODbdnXHTWAtM9k1BHsX6SGMdURHbEPOY"
+        },
+        {
+            "name": "Pool-Id",
+            "value": "aWr5_vW_1WgOQabfYCwFNMmbhNlCqzkb1Uz_DAZxCto"
+        },
+        {
+            "name": "Title",
+            "value": "Username: CTRL ZEN, Tweet: caption this. . . . #dark #emo ..."
+        },
+        {
+            "name": "Description",
+            "value": "caption this. . . . #dark #emo #emopop #darkpop #electro #electropop #electroindustrial #alien #chill #chillhop #lofi #hiphop #rap #darkrap #trance #spacey #cosmic #dragons #doof #Aliens  #electronicmusic #electronic #CaptionThis #photography #hot #DUO https://t.co/Rs5lTe6GEO"
+        },
+        {
+            "name": "Type",
+            "value": "social-post"
+        },
+        {
+            "name": "Artifact-Series",
+            "value": "Alex."
+        },
+        {
+            "name": "Artifact-Name",
+            "value": "Username: CTRL ZEN, Tweet: caption this. . . . #dark #emo ..."
+        },
+        {
+            "name": "Initial-Owner",
+            "value": "4VKvvMcRuMYnQtiGMNbiokRd6Graw-WmBN_1gNd3QCw"
+        },
+        {
+            "name": "Date-Created",
+            "value": "1675848392165"
+        },
+        {
+            "name": "Artifact-Type",
+            "value": "Alex-Messaging"
+        },
+        {
+            "name": "Keywords",
+            "value": "[]"
+        },
+        {
+            "name": "Media-Ids",
+            "value": "{}"
+        },
+        {
+            "name": "Profile-Image",
+            "value": "{}"
+        },
+        {
+            "name": "Association-Id",
+            "value": ""
+        },
+        {
+            "name": "Association-Sequence",
+            "value": ""
+        },
+        {
+            "name": "Child-Assets",
+            "value": "[]"
+        },
+        {
+            "name": "Implements",
+            "value": "ANS-110"
+        }
+    ]
+}

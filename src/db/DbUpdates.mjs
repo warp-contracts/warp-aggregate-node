@@ -75,6 +75,26 @@ export class DbUpdates {
     });
   }
 
+  async upsertDeployment(
+    contractTxId,
+    indexes,
+  ) {
+    this.#logger.info("Upserting deployment", contractTxId);
+
+    const effectiveIndexesCount = Math.min(TAGS_LIMIT, indexes.length);
+    const indexesInsert = {};
+
+    for (let i = 0; i < effectiveIndexesCount; i++) {
+      indexesInsert[`tag_index_${i}`] = indexes[i];
+    }
+
+
+    await this.#nodeDb("deployments").insert({
+      contract_tx_id: contractTxId.trim(),
+      ...indexesInsert,
+    });
+  }
+
   async upsertBalances(contractTxId, sortKey, state) {
     const balances = state.balances;
     const ticker = state.ticker; // pst standard
