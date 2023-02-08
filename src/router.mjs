@@ -9,4 +9,4 @@ export const router = new Router();
 router.get("/balances", walletBalances);
 router.get("/all-states", allStates);
 router.get("/interactions-by-indexes", interactions);
-router.get("/nft-by-owner", taggedNftByOwner)
+router.get("/nft-by-owner", taggedNftByOwner);

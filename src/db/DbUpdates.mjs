@@ -75,10 +75,7 @@ export class DbUpdates {
     });
   }
 
-  async upsertDeployment(
-    contractTxId,
-    indexes,
-  ) {
+  async upsertDeployment(contractTxId, indexes) {
     this.#logger.info("Upserting deployment", contractTxId);
 
     const effectiveIndexesCount = Math.min(TAGS_LIMIT, indexes.length);

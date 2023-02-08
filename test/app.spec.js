@@ -5,7 +5,6 @@ import request from "supertest";
 import { DbUpdates } from "../src/db/DbUpdates.mjs";
 
 describe("routes tests", () => {
-
   let nodeDb;
   let app;
 
@@ -30,7 +29,6 @@ describe("routes tests", () => {
   });
 
   describe("/nft-by-owner", () => {
-
     it("should fetch empty list ", async () => {
       const response = await request(app.callback()).get(
         "/nft-by-owner?ownerAddress=a"
@@ -40,9 +38,7 @@ describe("routes tests", () => {
     });
 
     it("should fail if ownerAddress not passed", async () => {
-      const response = await request(app.callback()).get(
-        "/nft-by-owner"
-      );
+      const response = await request(app.callback()).get("/nft-by-owner");
       expect(response.status).toBe(500);
     });
 
@@ -50,9 +46,17 @@ describe("routes tests", () => {
       const dbUpdates = new DbUpdates(nodeDb);
 
       await dbUpdates.upsertDeployment("1", ["atomic-asset"]);
-      await dbUpdates.upsertState("1", "2", {
-        owner: "ALICE"
-      }, "node1", "sig_by_node_1", '{}', "hash")
+      await dbUpdates.upsertState(
+        "1",
+        "2",
+        {
+          owner: "ALICE",
+        },
+        "node1",
+        "sig_by_node_1",
+        "{}",
+        "hash"
+      );
 
       const response = await request(app.callback()).get(
         "/nft-by-owner?ownerAddress=ALICE"
@@ -65,9 +69,17 @@ describe("routes tests", () => {
       const dbUpdates = new DbUpdates(nodeDb);
 
       await dbUpdates.upsertDeployment("1", ["atomic-asset", "b", "c"]);
-      await dbUpdates.upsertState("1", "2", {
-        owner: "ALICE"
-      }, "node1", "sig_by_node_1", '{}', "hash")
+      await dbUpdates.upsertState(
+        "1",
+        "2",
+        {
+          owner: "ALICE",
+        },
+        "node1",
+        "sig_by_node_1",
+        "{}",
+        "hash"
+      );
 
       const response = await request(app.callback()).get(
         "/nft-by-owner?ownerAddress=ALICE"
@@ -80,24 +92,56 @@ describe("routes tests", () => {
       const dbUpdates = new DbUpdates(nodeDb);
 
       await dbUpdates.upsertDeployment("1", ["atomic-asset", "b", "c"]);
-      await dbUpdates.upsertState("1", "2", {
-        owner: "ALICE"
-      }, "node1", "sig_by_node_1", '{}', "hash")
+      await dbUpdates.upsertState(
+        "1",
+        "2",
+        {
+          owner: "ALICE",
+        },
+        "node1",
+        "sig_by_node_1",
+        "{}",
+        "hash"
+      );
 
       await dbUpdates.upsertDeployment("2", ["atomic-asset", "b", "c"]);
-      await dbUpdates.upsertState("2", "2", {
-        owner: "ALICE"
-      }, "node1", "sig_by_node_1", '{}', "hash")
+      await dbUpdates.upsertState(
+        "2",
+        "2",
+        {
+          owner: "ALICE",
+        },
+        "node1",
+        "sig_by_node_1",
+        "{}",
+        "hash"
+      );
 
       await dbUpdates.upsertDeployment("3", ["3", "b", "c"]);
-      await dbUpdates.upsertState("2", "2", {
-        owner: "ALICE"
-      }, "node1", "sig_by_node_1", '{}', "hash")
+      await dbUpdates.upsertState(
+        "2",
+        "2",
+        {
+          owner: "ALICE",
+        },
+        "node1",
+        "sig_by_node_1",
+        "{}",
+        "hash"
+      );
 
       await dbUpdates.upsertDeployment("4", ["atomic-asset", "b", "c"]);
-      await dbUpdates.upsertState("4", "2", {
-        owner: "BOB"
-      }, "node1", "sig_by_node_1", '{}', "hash")
+      await dbUpdates.upsertState(
+        "4",
+        "2",
+        {
+          owner: "BOB",
+        },
+        "node1",
+        "sig_by_node_1",
+        "{}",
+        "hash"
+      );
 
       const response = await request(app.callback()).get(
         "/nft-by-owner?ownerAddress=ALICE"
@@ -105,7 +149,6 @@ describe("routes tests", () => {
       expect(response.status).toBe(200);
       expect(response.body.contracts.length).toBe(2);
     });
-
   });
 
   describe("/interactions-by-indexes", () => {

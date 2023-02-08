@@ -5,12 +5,14 @@ import { DbUpdates } from "../../src/db/DbUpdates";
 import { onNewInteraction } from "../../src/handlers/onInteraction.mjs";
 import { createNodeDbTables } from "../../src/db/initDb.mjs";
 
-const INTERACTION = JSON.parse(readFileSync(
-  join(process.cwd(), "test", "__data__", "interaction_1.json")
-));
-const INDEXED_INTERACTION = JSON.parse(readFileSync(
-  join(process.cwd(), "test", "__data__", "interaction_indexed.json")
-));
+const INTERACTION = JSON.parse(
+  readFileSync(join(process.cwd(), "test", "__data__", "interaction_1.json"))
+);
+const INDEXED_INTERACTION = JSON.parse(
+  readFileSync(
+    join(process.cwd(), "test", "__data__", "interaction_indexed.json")
+  )
+);
 
 describe("on interactions", () => {
   let nodeDb;
