@@ -88,7 +88,6 @@ export class DbUpdates {
       indexesInsert[`tag_index_${i}`] = indexes[i];
     }
 
-
     await this.#nodeDb("deployments").insert({
       contract_tx_id: contractTxId.trim(),
       ...indexesInsert,
