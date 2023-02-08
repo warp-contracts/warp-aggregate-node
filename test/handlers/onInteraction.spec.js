@@ -5,12 +5,12 @@ import { DbUpdates } from "../../src/db/DbUpdates";
 import { onNewInteraction } from "../../src/handlers/onInteraction.mjs";
 import { createNodeDbTables } from "../../src/db/initDb.mjs";
 
-const INTERACTION = readFileSync(
+const INTERACTION = JSON.parse(readFileSync(
   join(process.cwd(), "test", "__data__", "interaction_1.json")
-);
-const INDEXED_INTERACTION = readFileSync(
+));
+const INDEXED_INTERACTION = JSON.parse(readFileSync(
   join(process.cwd(), "test", "__data__", "interaction_indexed.json")
-);
+));
 
 describe("on interactions", () => {
   let nodeDb;
@@ -66,7 +66,7 @@ describe("on interactions", () => {
   it("should dont save more then 5 tags", async () => {
     const dbUpdates = new DbUpdates(nodeDb);
 
-    const message = JSON.parse(INDEXED_INTERACTION);
+    const message = INDEXED_INTERACTION;
     message.interaction.tags = message.interaction.tags.map((tag) => {
       if (tag.name === "Indexed-By") {
         return {
@@ -77,7 +77,7 @@ describe("on interactions", () => {
       return tag;
     });
 
-    await onNewInteraction(JSON.stringify(message), dbUpdates);
+    await onNewInteraction(message, dbUpdates);
 
     const interactions = await nodeDb.raw("SELECT * FROM interactions");
 
