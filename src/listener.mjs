@@ -15,7 +15,7 @@ LoggerFactory.INST.logLevel("debug", "listener");
 
 const logger = LoggerFactory.INST.create("listener");
 
-let port = 3001;
+let port = 8080;
 
 async function runListener() {
   const args = process.argv.slice(2);
