@@ -51,7 +51,7 @@ async function subscribeToGatewayNotifications(dbUpdates) {
   await subscriber.connect();
   logger.info("Connected to gateway notifications", subscriber.status);
 
-  subscriber.subscribe("states", (err) => {
+  subscriber.subscribe("states/u", (err) => {
     if (err) {
       logger.error("Failed to subscribe:", err.message);
     } else {
@@ -61,7 +61,7 @@ async function subscribeToGatewayNotifications(dbUpdates) {
     }
   });
 
-  subscriber.subscribe("contracts", (err) => {
+  subscriber.subscribe("contracts/u", (err) => {
     if (err) {
       logger.error("Failed to subscribe:", err.message);
     } else {
@@ -74,7 +74,7 @@ async function subscribeToGatewayNotifications(dbUpdates) {
   subscriber.on("message", async (channel, message) => {
     logger.info(`Received message from channel ${channel}`);
 
-    if (channel === "contracts") {
+    if (channel === "contracts/u") {
       const msgObj = JSON.parse(message);
 
       if (msgObj.initialState) {
@@ -88,7 +88,7 @@ async function subscribeToGatewayNotifications(dbUpdates) {
           `Unknown type of message from channel ${channel} => ${message}`
         );
       }
-    } else if (channel === "states") {
+    } else if (channel === "states/u") {
       await onNewState(message, dbUpdates);
     }
   });
