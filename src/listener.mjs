@@ -61,7 +61,7 @@ async function subscribeToGatewayNotifications(dbUpdates) {
     }
   });
 
-  subscriber.subscribe("contracts/u", (err) => {
+  subscriber.subscribe("contracts", (err) => {
     if (err) {
       logger.error("Failed to subscribe:", err.message);
     } else {
@@ -74,7 +74,7 @@ async function subscribeToGatewayNotifications(dbUpdates) {
   subscriber.on("message", async (channel, message) => {
     logger.info(`Received message from channel ${channel}`);
 
-    if (channel === "contracts/u") {
+    if (channel === "contracts") {
       const msgObj = JSON.parse(message);
 
       if (msgObj.initialState) {
