@@ -4,7 +4,7 @@ const allowedOrderingColumns = ["contract_tx_id", "sort_key"];
 const allowedOrders = ["asc", "desc"];
 
 export const allStates = async (ctx) => {
-  const { page, limit, orderBy, order, id } = ctx.query;
+  const { page, limit, orderBy, order, id, index } = ctx.query;
 
   const nodeDb = ctx.nodeDb;
 
@@ -34,31 +34,38 @@ export const allStates = async (ctx) => {
 
   let parsedOrderBy = null;
   if (orderBy == "contract_tx_id") {
-    parsedOrderBy = `contract_tx_id ${order}`;
+    parsedOrderBy = `s.contract_tx_id ${order}`;
   } else if (orderBy == "sort_key") {
-    parsedOrderBy = `sort_key ${order}, contract_tx_id ${order}`;
+    parsedOrderBy = `s.sort_key ${order}, s.contract_tx_id ${order}`;
   }
 
   try {
     const result = await nodeDb.raw(
       `
-        SELECT contract_tx_id,
-               sort_key,
-               state,
-               state_hash,
-               node,
-               signature,
-               manifest
-        FROM states
-        ${id ? " WHERE contract_tx_id = ? " : ""}
-        ORDER BY ${parsedOrderBy}
-        LIMIT ? OFFSET ?
-    `,
+          SELECT s.contract_tx_id,
+                 s.sort_key,
+                 s.state,
+                 s.state_hash,
+                 s.node,
+                 s.signature,
+                 s.manifest
+          FROM states s
+              ${index != null ? "LEFT JOIN deployments d on d.contract_tx_id = s.contract_tx_id" : ""}
+          WHERE true ${id ? " AND s.contract_tx_id = ? " : ""} ${
+                  index != null
+                          ? ` AND '${index}' IN (d.tag_index_0, d.tag_index_1, d.tag_index_2, d.tag_index_3, d.tag_index_4)`
+                          : ""
+          }
+          ORDER BY ${parsedOrderBy}
+              LIMIT ?
+          OFFSET ?
+      `,
       bindings
     );
 
     const resultTotal = await nodeDb.raw(
-      `select count(*) as total from states`
+      `select count(*) as total
+       from states`
     );
 
     ctx.body = {
@@ -66,9 +73,9 @@ export const allStates = async (ctx) => {
         total: resultTotal[0].total,
         limit: parsedLimit,
         items: result?.length,
-        page: parsedPage,
+        page: parsedPage
       },
-      states: result,
+      states: result
     };
     ctx.status = 200;
   } catch (e) {
