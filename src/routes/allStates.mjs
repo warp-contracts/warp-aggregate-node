@@ -51,9 +51,9 @@ export const allStates = async (ctx) => {
                  s.manifest
           FROM states s
               ${index != null ? "LEFT JOIN deployments d on d.contract_tx_id = s.contract_tx_id" : ""}
-          WHERE true ${id ? " AND s.contract_tx_id = ? " : ""} ${
+          ${
                   index != null
-                          ? ` AND '${index}' IN (d.tag_index_0, d.tag_index_1, d.tag_index_2, d.tag_index_3, d.tag_index_4)`
+                          ? ` WHERE '${index}' = d.tag_index_0`
                           : ""
           }
           ORDER BY ${parsedOrderBy}
