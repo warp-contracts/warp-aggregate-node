@@ -42,6 +42,9 @@ export const allStates = async (ctx) => {
   try {
     const result = await nodeDb.raw(
       `
+        WITH indexed_contracts AS (
+            SELECT contract_tx_id FROM deployments WHERE '${index}' = d.tag_index_0
+        )
           SELECT s.contract_tx_id,
                  s.sort_key,
                  s.state,
@@ -49,13 +52,7 @@ export const allStates = async (ctx) => {
                  s.node,
                  s.signature,
                  s.manifest
-          FROM states s
-              ${index != null ? "LEFT JOIN deployments d on d.contract_tx_id = s.contract_tx_id" : ""}
-          ${
-                  index != null
-                          ? ` WHERE '${index}' = d.tag_index_0`
-                          : ""
-          }
+          FROM states s WHERE s.contract_tx_id IN (select contract_tx_id from indexed_contracts)
           ORDER BY ${parsedOrderBy}
               LIMIT ?
           OFFSET ?
