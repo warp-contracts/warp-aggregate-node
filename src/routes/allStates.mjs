@@ -43,7 +43,7 @@ export const allStates = async (ctx) => {
     const result = await nodeDb.raw(
       `
         WITH indexed_contracts AS (
-            SELECT contract_tx_id FROM deployments WHERE '${index}' = d.tag_index_0
+            SELECT contract_tx_id FROM deployments WHERE '${index}' IN (d.tag_index_0, d.tag_index_1, d.tag_index_2, d.tag_index_3, d.tag_index_4)
         )
           SELECT s.contract_tx_id,
                  s.sort_key,
